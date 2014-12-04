@@ -1,16 +1,16 @@
 <?php
-	function blink_led() {
-		$data = array("percent" => "100", "duration_ms" => "10000");                                                                    
+	function update_number($nb=1) {
+		$data = array("percent" => intval($nb), "duration_ms" => -1);                                                                    
 		$data_string = json_encode($data);                                                                                   
 		 
-		$ch = curl_init('https://api-http.littlebitscloud.cc/devices/DEVICEID/output');                                                                      
+		$ch = curl_init('https://api-http.littlebitscloud.cc/devices/XXX/output');                                                                      
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");   
-		curl_setopt($ch, CURLOPT_VERBOSE, false);                                                                
+		//curl_setopt($ch, CURLOPT_VERBOSE, false);                                                                
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);                                                                  
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
 		    'Content-Type: application/json',                                                                                
-		    'Authorization: Bearer XXXXXXXX',
+		    'Authorization: Bearer XXX',
 		    'Accept: application/vnd.littlebits.v2+json')                                                                       
 		);                                                                                                                   
 		 
@@ -18,16 +18,16 @@
 	}
 
 	function get_velib_count() {
-		$ch_velib= curl_init('http://mathemagie.net/projects/velib/index.php');                                                                      
-		curl_setopt($ch_velib, CURLOPT_RETURNTRANSFER, true); 
-		$return = curl_exec($ch_velib);
-		return $return;
+		$url = 'https://api.jcdecaux.com/vls/v1/stations/10025?contract=paris&apiKey=XXX';
+
+		$json = file_get_contents($url);
+		$data = json_decode($json,true);
+		if (1) print_r($data);
+		return $data['available_bikes'];
 	}
 
 	$nb = get_velib_count();
 	echo "nombre de vélib => " . $nb . "\n";
-	if (intval($nb) >= 1) {
-		echo "BLINK LED ON\n";
-		blink_led();
-	}
+	echo "UPDATE LITTLEBITS NUMBER\n";
+	update_number($nb);
 ?>
