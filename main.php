@@ -1,4 +1,7 @@
 <?php
+	/*
+	* update number module with Vélib data (littleBits Cloud HTTP API Documentation http://developer.littlebitscloud.cc)
+	*/
 	function update_number($nb=1) {
 		$data = array("percent" => intval($nb), "duration_ms" => -1);                                                                    
 		$data_string = json_encode($data);                                                                                   
@@ -16,7 +19,10 @@
 		 
 		$result = curl_exec($ch);
 	}
-
+	
+	/*
+	* retrieve velib count (see Velib documentation API https://developer.jcdecaux.com/#/home)
+	*/
 	function get_velib_count() {
 		$url = 'https://api.jcdecaux.com/vls/v1/stations/10025?contract=paris&apiKey=XXX';
 
